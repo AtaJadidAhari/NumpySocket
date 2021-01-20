@@ -42,6 +42,12 @@ class NumpySocket():
         self.socket.shutdown(1)
         self.socket.close()
 
+    def sendAck(self):
+        self.socket.send(b'1')
+    
+    def recieveAck(self):
+        return self.client_connection.recv(1)
+
     def sendNumpy(self, frame):
         if self.type is not "server":
             raise ConfigurationError("class not configured as server")
@@ -84,14 +90,17 @@ class NumpySocket():
         self.client_connection.shutdown(1)
         self.client_connection.close()
 
-    def recieveNumpy(self, socket_buffer_size=1024):
+    def recieveNumpy(self):
         if self.type is not "client":
             raise ConfigurationError("class not configured as client")
 
         length = None
         frameBuffer = bytearray()
         while True:
-            data = self.client_connection.recv(socket_buffer_size)
+            #print(len(frameBuffer), length)
+            #65536
+            #32768
+            data = self.client_connection.recv(65536)
             frameBuffer += data
             if len(frameBuffer) == length:
                 break
