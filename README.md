@@ -13,3 +13,6 @@ The machine receiving the Numpy array
 
 ## Status
 Early Development
+
+## My Changes
+Added multithreaded data transimission, increasing throughput.
