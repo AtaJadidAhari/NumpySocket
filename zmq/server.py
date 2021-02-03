@@ -5,16 +5,27 @@ import imagezmq
 import imutils
 import cv2
 import time
+from detect import init, detect_function
+
 
 # initialize the ImageHub object
 imageHub = imagezmq.ImageHub()
 
 print('here')
 
+
+
+detector = init("config_edge.yaml")
+
+
+
+
 # start looping over all the frames
 time.sleep(10)
 start = time.time()
 num_of_frames = 0
+
+
 
 while True:
     # receive RPi name and frame from the RPi and acknowledge
@@ -23,12 +34,13 @@ while True:
     print(time.time() - start)
     #print(frame.shape)
     imageHub.send_reply(b'OK')
+    detect_function(frame, detector)
     
     #frame = imutils.resize(frame, width=400)
     num_of_frames += 1
     
 
-    cv2.imshow('frame', frame)
+    #cv2.imshow('frame', frame)
     key = cv2.waitKey(1) & 0xFF
     if key == ord("q"):
         break
